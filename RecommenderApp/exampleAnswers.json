@@ -1,0 +1,38 @@
+{
+    "What is the name of your charity?": [
+        "Some charity name",
+        "No Component"
+    ],
+    "How many boxes would you like to have for each component?": [
+        "5",
+        "5",
+        "5",
+        "5",
+        "5",
+        "No Component"
+    ],
+    "What type of charity work do you do?": [
+        "Animal Welfare",
+        "No Component"
+    ],
+    "What resources are needed to succeed?": [
+        "Animal enclosures\r\nVeterinary equipment\r\nNutritional plans\r\nShelter facilities\r\nEnrichment tools",
+        "Inputs"
+    ],
+    "How will you mitigate the problems you are trying to address?": [
+        "Wildlife rehabilitation\r\nCruelty investigations\r\nAdoption drives\r\nFundraising events\r\nCommunity outreach",
+        "Activities"
+    ],
+    "How do you know your solutions have been successfully implemented?": [
+        "Animals rescued\r\nAdoption rates\r\nEducational materials distributed\r\nCorporate commitments secured\r\nSterilization procedures performed",
+        "Outputs"
+    ],
+    "What are the differences you expect to see from your work?": [
+        "Improved living conditions\r\nReduced euthanasia rates\r\nIncreased adoption success\r\nEnhanced public awareness\r\nStrengthened welfare legislation",
+        "Outcomes"
+    ],
+    "What are the long-term goals you are trying to achieve?": [
+        "Species conservation\r\nReduced animal suffering\r\nCultural attitude shifts\r\nSustainable farming practices\r\nIllegal wildlife trade reduction",
+        "Impacts"
+    ]
+}

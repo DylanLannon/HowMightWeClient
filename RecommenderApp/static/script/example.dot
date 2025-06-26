@@ -1,0 +1,75 @@
+digraph G {
+    labelloc="t";
+    label="Theory Of Change Diagram";
+    node [shape=box,width=1];
+
+    graph [style=filled color=transparent fillcolor=lightgrey];
+    rankdir="LR";
+    compound=true;
+
+    DUMMY_0 -> DUMMY_1 -> DUMMY_2 -> DUMMY_3 -> DUMMY_4 [style=invis]
+
+    subgraph cluster_0 {
+        DUMMY_0 [shape=point style=invis height=0]
+        node [style=filled,color=black,fillcolor=lightblue];
+        a0
+        a1
+        a2
+        a3
+        label = "Inputs";
+    }
+
+    subgraph cluster_1 {
+        DUMMY_1 [shape=point style=invis height=0]
+        node [style=filled,color=black,fillcolor=lightyellow];
+        b0
+        b1
+        b2
+        b3
+        label = "Activites";
+
+    }
+
+    subgraph cluster_2 {
+        DUMMY_2 [shape=point style=invis height=0]
+        node [style=filled,color=black,fillcolor=lavenderblush];
+        c0
+        c1
+        c2
+        c3
+        label = "Outputs";
+    }
+
+    subgraph cluster_3 {
+        DUMMY_3 [shape=point style=invis height=0]
+        node [style=filled,color=black,fillcolor=lightgreen];
+        d0
+        d1
+        d2
+        d3
+        label = "Outcomes";
+    }
+
+    subgraph cluster_4 {
+        DUMMY_4 [shape=point style=invis height=0]
+        node [style=filled,color=black,fillcolor=lightcoral];
+        e0
+        e1
+        e2
+        e3
+        label = "Impacts";
+    }
+
+    subgraph cluster_5 {
+        label=test;
+        e
+        e22
+        e33
+
+    }  
+
+    
+    a0 -> b3 -> c0 -> d2 -> e1 [constraint=false color="#ff0800"]
+    a3 -> b1 -> c0 -> d3 -> e1 [constraint=false];
+
+}   

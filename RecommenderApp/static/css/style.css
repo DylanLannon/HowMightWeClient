@@ -1,0 +1,108 @@
+* {
+    font: 92% helvetica;
+    border-radius: 4px;
+}
+
+body {
+    margin: 1em;
+    background-color: #e7e7e7;
+}
+
+h2 {
+    text-align: center;
+    font-size: 2em;
+    margin: 0 5% 10px;
+}
+
+p {
+    margin-top: 20px;
+    margin-bottom: 0.3em;
+}
+
+output {
+    display: flex;
+    justify-content: center;
+}
+
+textarea {
+    height: auto;
+    min-height: 3em;
+    resize: none;
+}
+
+fieldset {
+    background-color: #f8f8f8;
+    border: 2px solid #ddd;
+    padding: 10px;
+}
+
+
+.form_body {
+    background-color: white;
+    border: 1px solid #4b464a;
+    font: 1.13em helvetica;
+    margin: 0 5% 0;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+    clear: both;
+    overflow: hidden;
+}
+
+
+.text_box {
+    font-size: 0.8em;
+    padding: 10px;
+    margin: 6px auto 6px;
+    display: block;
+    width: 100%;
+    border: 2px solid #ddd;
+    background-color: #fdfdfd;
+    box-sizing: border-box;
+}
+
+input[type=range],
+.check_box,
+.radio_box {
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+input[type=radio] {
+    margin-top: -3px;
+}
+
+input[type=checkbox] {
+    margin-top: 0px;
+}
+
+input[type=text] {
+    height: 3.4em;
+}
+
+input[type=submit] {
+    float: right;
+}
+
+a {
+    display: inline-block;
+    height: 16px;
+    margin: 8px 2px 0;
+}
+
+input[type=submit],
+a {
+    background-color: #0483aa;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    cursor: pointer;
+    text-align: center;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

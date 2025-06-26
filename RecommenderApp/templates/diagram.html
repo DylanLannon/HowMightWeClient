@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Theory Of Change Recommendation System</title>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/style.css')}}">
+</head>
+
+<body>
+    <div class="center">
+        <object class="form_body" data="{{url_for('static', filename='img/output.svg')}}"></object>
+    </div>
+    <div class="center">
+        <a href="{{url_for('form')}}">◄ Go Back To Form</a>
+        <a href="{{url_for('static', filename='img/output.png')}}" download>.PNG Download</a>
+        <a href="{{url_for('static', filename='img/output.svg')}}" download>.SVG Download</a>
+        <a href="{{url_for('static', filename='script/output.dot')}}" download>.DOT Download</a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,20 @@
+Dependencies: Flask and pydot.
+
+Commands (Windows Powershell):
+	python -m venv .venv
+	source .venv/bin/activate
+	pip install -r requirements.txt
+
+Pydot may throw a "dot not found in path" error, so you may have to add the dot.exe or dot.bat file path in yourself
+
+For the questions.json file if something doesn't work as intended or something broke, these might be the potential problems:
+
+- two questions have the exact same string, rendering output to treat them as the same thing and breaking things. Make sure each question is unique
+- input type is not "text", "range", "radio" or "checkbox".
+- slider_range is not two integer values in an array. Note that slider_num and the number of lists in the array have to match: i.e.
+	- slider_range: [[0,100], [0,100]]
+	- slider_num: 2
+	- subtitle: ["title1", "title2"]
+- toc_component can only be: "inputs", "activities", "outputs", "outcomes" or "impacts".
+- options should be an array of strings
+- If you have answers saved in answers.json and you wanted to change the "question" string, delete answers.json before running the app again to prevent errors.

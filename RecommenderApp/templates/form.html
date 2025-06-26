@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Theory Of Change Builder</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+</head>
+
+<body>
+    <h2>Theory Of Change Builder</h2>
+    <form method="POST" class="form_body">
+        <!-- This form will submit a dictionary containing key:value pairs as question:answer pairs. 
+             Each answer from the textarea component will be considered and put into each diagram box-->
+        {% for question in questions %}
+        {% set current_question = loop.index %}
+        <p><b>Q{{ current_question }}. {{ question["question"] }}</b></p>
+        
+        {% if 'text' == question['input_type'] %}
+        <input type="text" data-toc-component="{{ question['toc_component'] }}" name="{{ question['question'] }}"
+            class="text_box" id="{{ current_question }}" placeholder="Enter some text"
+            value="{{ answers[question['question']][0] if answers is not none }}" required>
+
+        {% elif 'textarea' == question['input_type'] %}
+        <textarea name="{{ question['question'] }}" class="text_box" id="{{ current_question }}" cols="40" cols="5"
+            placeholder="Each line of this textbox will be considered as one answer each so separate your answers line by line when entering text."
+            rows="{{ answers[question['question']][0].split('\r\n') | length if answers is not none else 4 }}"
+            data-toc-component="{{ question['toc_component'] }}">{{ answers[question['question']][0] if answers is not none }}</textarea>
+        <!-- Code taken from https://gist.github.com/nicohaemhouts/cd1c95c4e342ff65589b to limit line breaks based on row amount -->
+        <script type="text/javascript">
+            $(document).ready(function () {
+                const numberOfLines = (text) => (text.match(/\n/g) || []).length + 1;
+                const maxRows = (textarea) => parseInt(textarea.attr("rows"));
+
+                $("#{{ current_question }}").on('keypress', function (event) {
+                    const textarea = $(this);
+
+                    if (event.which === 13 && numberOfLines(textarea.val()) === maxRows(textarea)) {
+                        return false;
+                    }
+                }).on("paste", function (event) {
+                    const textarea = $(this),
+                        pastedText = (event.originalEvent || event).clipboardData.getData("text/plain");
+
+                    if (!pastedText || numberOfLines(textarea.val() + pastedText) > maxRows(textarea)) {
+                        return false
+                    }
+                });
+            });
+        </script>
+
+        <!-- -->
+        {% elif 'range' == question['input_type'] and question['slider_range']|length == question['slider_num'] %}
+        {% for num in range(question['slider_num']) %}
+        <fieldset>
+            <legend>{{question['subtitle'][loop.index0]}}</legend>
+            <p style="display: inline-block; margin: 0;">{{question['slider_range'][num][0]}}</p>
+            <p style="display: block; text-align: right; float: right; margin: 0;">{{question['slider_range'][num][1]}}
+            </p>
+            <input type="range" style="width: 100%" name="{{ question['question'] }}"
+                id="{{ current_question ~ loop.index }}" min="{{ question['slider_range'][num][0] }}"
+                max="{{ question['slider_range'][num][1] }}"
+                value="{{ answers[question['question']][loop.index0] if answers is not none else question['slider_range'][num][1] // 2 }}"
+                data-toc-component="{{ question['subtitle'][loop.index0] }}"
+                oninput="this.nextElementSibling.value = this.value">
+            <output name="{{ loop.index }}"
+                for="{{ current_question ~ loop.index }}">{{answers[question['question']][loop.index0] if answers is not
+                none else
+                question['slider_range'][num][1] // 2}}</output>
+        </fieldset>
+        <script text="text/javascript">
+            slider = $("#{{ current_question ~ loop.index }}")
+            if (slider.data("toc-component")) {
+                slider.on("input change", function () {
+                    $("textarea[data-toc-component={{ question['subtitle'][loop.index0] }}]").attr("rows", $(this).val())
+                });
+            }
+        </script>
+        {% endfor %}
+
+        {% elif 'checkbox' == question['input_type'] and question['options'] is not none %}
+        <fieldset>
+            {% set ticked = [1] %}
+            {% for option in question['options'] %}
+            <label for="{{ current_question ~ loop.index }}" class="check_box" style="padding: 0.2rem 0.4rem 0.2rem;">
+                <input type="checkbox" class="check_box" name="{{ question['question'] }}"
+                    id="{{ current_question ~ loop.index }}" value="{{ option }}" required {{ 'checked' if answers is
+                    not none and answers[question['question']][ticked|length - 1]==option and answers is not none else
+                    ticked.pop(-1) }}>
+                {{option}}
+            </label>
+            {% set __ = ticked.append(1) %}
+            <!-- Checkbox validation - have atleast one checkbox ticked to answer question -->
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    checkboxes = $(`[name="{{ question['question'] }}"]`);
+                    // make sure required attribute is removed if answers are saved
+                    $(".check_box").trigger("change");
+                    checkboxes.change(function () {
+                        if ($(".check_box:checked").length > 0) { checkboxes.removeAttr('required'); }
+                        else { checkboxes.attr("required", true); }
+                    });
+                });
+            </script>
+            {% endfor %}
+        </fieldset>
+
+        {% elif 'radio' in question['input_type'] and question['options'] is not none %}
+        <fieldset>
+            {% set ticked = [1] %}
+            {% for option in question['options'] %}
+            <label for="{{ current_question ~ loop.index0 }}" class="radio_box" style="padding: 0.2rem 0.4rem 0.2rem;">
+                <input type="radio" class="radio_box" name="{{question['question']}}"
+                    id="{{ current_question ~ loop.index0 }}" value="{{ option }}" required {{ 'checked' if answers is
+                    not none and answers[question['question']][ticked|length - 1]==option else ticked.pop(-1) }}>
+                {{ option }}
+            </label>
+            {% set __ = ticked.append(1) %}
+            <!-- Disable extra text box when clicking anything other than 'Other'-->
+            <script type="text/javascript">
+                radioOptions = $("#{{ current_question ~ loop.index0 }}")
+                radioOptions.click(function () {
+                    $("[name='{{ question['question'] }}'][id='{{ current_question }}']").hide();
+                    $("[name='{{ question['question'] }}'][id='{{ current_question }}']").prop("disabled", true)
+                });
+            </script>
+            {% endfor %}
+            {% if 'Other' in question['options'] %}
+                <input type="text" name="{{ question['question'] }}" class="text_box" id="{{ current_question }}"
+                    placeholder="Enter some text" value="{{ answers[question['question']][1] if answers is not none }}"
+                    required>
+
+                <script type="text/javascript">
+                    $("[name='{{ question['question'] }}'][id='{{ current_question }}']").hide();
+                    $("[name='{{ question['question'] }}'][id='{{ current_question }}']").prop("disabled", true)
+
+                    radioOther = $("#{{ current_question ~ question['options'].index('Other')}}")
+                    radioOther.change(function () {
+                        $("[name='{{ question['question'] }}'][id='{{ current_question }}']").show();
+                        $("[name='{{ question['question'] }}'][id='{{ current_question }}']").prop("disabled", false)                        
+                    });
+
+                    // if preselected by answers.json
+                    if (radioOther.is(":checked")) {
+                        radioOther.trigger("change");
+                    }
+                </script>
+            {% endif %}
+        
+        </fieldset>
+
+        {% else %}
+            <p style="color:red;"><b>Missing values. Check the questions.json file and try again.</b></p><br><br>
+        {% endif %}
+
+        <input type="hidden" name="{{ question['question'] }}" value="{{ question['toc_component'] or 'No Component'}}">
+
+        {% endfor %}
+        <br>
+
+        <input type="submit" value="Save and Submit">
+    </form>
+</body>
+
+</html>
